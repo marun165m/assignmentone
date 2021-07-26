@@ -1,5 +1,5 @@
 
-import { Redirect } from "react-router-dom";
+import { Redirect,Link } from "react-router-dom";
 
 import React, {useState}from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -35,16 +35,21 @@ export default function App() {
 
     setRender(true);
   }
+  const checkLength=(value)=>value.length>6;
   return render?(<Redirect to="/users"/>):(
+
+
     <div style={{ display: 'block', 
                   width: 700, 
                   padding: 30 }}>
+
+        <Link className="btn btn-primary" to="/users">back to users</Link>
         <div className="card m-3">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-row">
                         <div className="form-group col">
                             <label>Title</label>
-                            <select name="title" {...register('title')} className={`form-control ${errors.title ? 'is-invalid' : ''}`}>
+                            <select name="title" {...register('title',{required:"true"})} className={`form-control ${errors.title ? 'is-invalid' : ''}`}>
                                 <option value=""></option>
                                 <option value="Mr">Mr</option>
                                 <option value="Mrs">Mrs</option>
@@ -54,16 +59,16 @@ export default function App() {
                         </div>
                         <div className="form-group col-5">
                             <label>First Name</label>
-                            <input name="firstName" type="text" {...register('firstName')} className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
+                            <input name="firstName" type="text" {...register('firstName',{required:"true"})} className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
                         </div>
                         <div className="form-group col-5">
                             <label>Last Name</label>
-                            <input name="lastName" type="text" {...register('lastName')} className={`form-control ${errors.lastName ? 'is-invalid' : ''}`} />
+                            <input name="lastName" type="text" {...register('lastName' ,{required:"true"})} className={`form-control ${errors.lastName ? 'is-invalid' : ''}`} />
                         </div>
                     </div>
                     <div className="form-group col">
                             <label>gender</label>
-                            <select name="gender" {...register('gender')} className={`form-control ${errors.title ? 'is-invalid' : ''}`}>
+                            <select name="gender" {...register('gender',{required:"true"})} className={`form-control ${errors.title ? 'is-invalid' : ''}`}>
                                 <option value="male">male</option>
                                 <option value="female">female</option>
                                 <option value="other">other</option>
@@ -72,7 +77,7 @@ export default function App() {
                     <div className="form-row">
                         <div className="form-group col">
                             <label>Date of Birth</label>
-                            <input name="dob" type="date" {...register('dob')} className={`form-control ${errors.dob ? 'is-invalid' : ''}`} />
+                            <input name="dob" type="date" {...register('dob',{required:"true"})} className={`form-control ${errors.dob ? 'is-invalid' : ''}`} />
                         </div>
                         <div className="form-group col">
                             <label>Email</label>
@@ -86,7 +91,11 @@ export default function App() {
                     <div className="form-row">
                         <div className="form-group col">
                             <label>Password</label>
-                            <input name="password" type="password" {...register('password')} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
+                            <input name="password" type="password" {...register('password',{required:"true",validate:{
+                                checkLength: checkLength,
+
+                            }})} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
+                           <p style={{color:"red"}}>{errors.password&&errors.password.type}</p> 
                         </div>
 
                     </div>

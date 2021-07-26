@@ -16,7 +16,10 @@ import User from './user'
     function handleSubmit(event) {
       event.preventDefault();
       if ((email === data.user) && (password === data.pwd)) {
+
         hist.push("/users");
+        }else{
+            document.getElementById("error").innerHTML="wrong email or password!";
         }
     }   
     
@@ -35,7 +38,7 @@ import User from './user'
                     <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" className="form-control"  />
                 </div>
 
-
+                <p id="error" style={{color:"red"}}></p>
 
                 <button  type="submit" className="btn btn-primary btn-block">Submit</button>
 
