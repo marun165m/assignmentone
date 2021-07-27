@@ -5,8 +5,8 @@ import { Button, Card, CardGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import React, { Component, useState, useEffect } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+// import "./App.css";
+
 function User() {
   let initial = JSON.parse(localStorage.getItem("arrayodData")) || "";
 
@@ -18,12 +18,13 @@ function User() {
       .then((result) => {
         console.log(result.results);
         localStorage.setItem("arrayodData", JSON.stringify(result["results"]));
+        setdatastore(JSON.parse(localStorage.getItem("arrayodData")));
       });
-  }, []);
-  let datastr = JSON.parse(localStorage.getItem("arrayodData"));
-  useEffect(() => {
-    setdatastore(datastr);
-  }, []);
+  },[]);
+  // let datastr = JSON.parse(localStorage.getItem("arrayodData"));
+  // useEffect(() => {
+  //   setdatastore(datastr);
+  // }, []);
   const onClickdelete = (ind) => {
     console.log("bdy");
     let datastoretemp = datastore.filter((value, index) => {

@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useForm } from "react-hook-form";
-export default function App() {
+export default function Add() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [render,setRender]=useState(false)
   const onSubmit =(data)=>{
