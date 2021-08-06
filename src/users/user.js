@@ -1,26 +1,32 @@
 /** @format */
 import { useForm } from "react-hook-form";
 
-import { Button, Card, CardGroup } from "react-bootstrap";
+import { Button, Card, CardGroup ,Modal} from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import Add from '../addUser/add'
 import React, { Component, useState, useEffect } from "react";
 // import "./App.css";
 
 function User() {
   let initial = JSON.parse(localStorage.getItem("arrayodData")) || "";
-
   const [search, setsearch] = useState("");
   const [datastore, setdatastore] = useState(initial);
+  console.log(datastore);
+
   useEffect(() => {
     fetch("https://randomuser.me/api/0.8/?results=20")
       .then((res) => res.json())
       .then((result) => {
         console.log(result.results);
-        localStorage.setItem("arrayodData", JSON.stringify(result["results"]));
-        setdatastore(JSON.parse(localStorage.getItem("arrayodData")));
+        if((!JSON.parse(localStorage.getItem("arrayodData")))||(datastore=="")){
+          localStorage.setItem("arrayodData", JSON.stringify(result["results"]));
+          setdatastore(JSON.parse(localStorage.getItem("arrayodData")));
+        }
+
       });
   },[]);
+  console.log(datastore);
+
   // let datastr = JSON.parse(localStorage.getItem("arrayodData"));
   // useEffect(() => {
   //   setdatastore(datastr);
@@ -75,19 +81,9 @@ function User() {
                       <small className='text-muted'>{item.user.email}</small>
                     </Card.Footer>
                     <Card.Footer>
-                      <button
-                        onClick={() => {
-                          const confirmBox = window.confirm(
-                            "Do you really want to delete this Crumb?"
-                          );
-                          if (confirmBox === true) {
-                            onClickdelete(item.user.name.first);
-                          }
-                        }}
-                        type='button'
-                        className='btn btn-primary btn-block'>
-                        delete
-                      </button>
+
+                      <Example index={item.user.name.first} onClickdelete={(index)=>{onClickdelete(index);}}/>
+
 
                       <button
                         className='delete button'
@@ -103,7 +99,7 @@ function User() {
       </CardGroup>
     </div>
   ) : (
-    <EditView item={item} index={index} setEdit={setEditView} />
+    <Add item={item} index={index} setEdit={setEditView} />
   );
 }
 
@@ -269,5 +265,38 @@ function EditView(props) {
         </form>
       </div>
     </div>
+  );
+}
+function Example(props) {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+ const handleDelete=()=>{
+   console.log("props.inex",props.index)
+  props.onClickdelete(props.index); 
+  handleClose();
+ }
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        do you want to delete?
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>delete?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleDelete}>
+            Delete?
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }

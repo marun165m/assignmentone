@@ -6,34 +6,56 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useForm } from "react-hook-form";
-export default function Add() {
+export default function Add( props) {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [render,setRender]=useState(false)
   const onSubmit =(data)=>{
     console.log(data);
-    let datastr = JSON.parse(localStorage.getItem("arrayodData"));
-    let newinstance={"user": {
-                    gender: data.gender,
-                    name:{
-                      "title":data.title,
-                      "first": data.firstName,
-                      "last": data.lastName
-                    },
-                    email: data.email,
-                    password: data.password,
-                    dob: data.dob,
-                    picture:{
-                      large: data.picture,
+  console.log(props.item);
+  console.log(props.index)
+    if(props.item){
+        let datastr = JSON.parse(localStorage.getItem("arrayodData"));
+        let newinstance = props.item;
+        newinstance.user.gender= data.gender;
+        newinstance.user.name.title= data.title;
+        newinstance.user.name.first= data.firstName;
+        newinstance.user.name.last =data.lastName;
+        newinstance.user.email =data.email;
+        newinstance.user.password =data.password;
+        newinstance.user.dob =data.dob;
+        newinstance.user.picture.large =data.picture;
+      datastr.splice(props.index,1,newinstance);
+      localStorage.setItem("arrayodData", JSON.stringify(datastr));
+      props.setEdit(false);
 
-                    }
- 
+
     }
-  };
-  datastr.push(newinstance);
-  console.log("datastr",datastr);
-  localStorage.setItem("arrayodData", JSON.stringify(datastr));
+    else{
+        let datastr = JSON.parse(localStorage.getItem("arrayodData"));
+        let newinstance={"user": {
+                        gender: data.gender,
+                        name:{
+                          "title":data.title,
+                          "first": data.firstName,
+                          "last": data.lastName
+                        },
+                        email: data.email,
+                        password: data.password,
+                        dob: data.dob,
+                        picture:{
+                          large: data.picture,
+    
+                        }
+     
+        }
+      };
+      datastr.push(newinstance);
+      console.log("datastr",datastr);
+      localStorage.setItem("arrayodData", JSON.stringify(datastr));
+      setRender(true);
 
-    setRender(true);
+    }
+
   }
   const checkLength=(value)=>value.length>6;
   return render?(<Redirect to="/users"/>):(
@@ -43,7 +65,7 @@ export default function Add() {
                   width: 700, 
                   padding: 30 }}>
 
-        <Link className="btn btn-primary" to="/users">back to users</Link>
+        <Link   className="btn btn-primary" to="/users">back to users</Link>
         <div className="card m-3">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-row">
